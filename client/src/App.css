@@ -1,28 +1,85 @@
+body {
+	background: #323232;
+}
+
 .App {
-  text-align: center;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	height: 100vh;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.controls {
+	margin-bottom: 20px;
+	width: 456px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+button {
+	background: dimgrey;
+	color: silver;
+	border-radius: 3px;
+	border: none;
+	font-size: 14px;
+	letter-spacing: 1px;
+	font-weight: bold;
+	padding: 7px 14px;	
+	float: left;
+	outline: none;
+	cursor: pointer;
 }
 
-.App-title {
-  font-size: 1.5em;
+.bpm {
+	float: right;
+	color: silver;
+	font-weight: bold;
 }
 
-.App-intro {
-  font-size: large;
+.bpm label {
+	margin: 3px 5px 0 0;
+	float: left;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.bpm input {
+	float: left;
+}
+
+.bpm output {
+	float: left;
+	margin: 3px 0 0 5px;
+}
+
+.row {
+	clear: both;
+}
+
+.pad {
+	width: 50px;
+	height: 50px;
+	float: left;
+	margin: 0 7px 7px 0;
+	cursor: pointer;
+	background: grey;
+	border-radius: 3px;
+}
+
+.pad:hover {
+	background: silver;
+}
+
+.pad.active {
+	background: green;
+}
+
+.pad.playing {
+	background: gainsboro;
+	box-shadow: 0px 0px 20px 3px rgba(255, 255, 210, .70);
+}
+
+.pad.active.playing, .pad.active:hover {
+	background: lime;
+}
+
+p.link a {
+	color: silver;
 }
