@@ -83,3 +83,11 @@ button {
 p.link a {
 	color: silver;
 }
+
+.selector{
+  float: left;
+}
+
+.DeleteBtn{
+  float:right;
+}

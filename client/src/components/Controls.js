@@ -21,6 +21,7 @@ const Controls = (props) => {
                     {props.bpm}
                 </output>
             </div>
+            <button onClick={() => props.addNewPads()}>+</button>
         </div>
     );
 }

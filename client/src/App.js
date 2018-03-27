@@ -4,6 +4,7 @@ import './App.css';
 import DrumMachine from './components/DrumMachine';
 import Pads from './components/Pads';
 import Controls from './components/Controls';
+import MIDISounds from 'midi-sounds-react';
 
 class App extends Component {
   constructor() {
@@ -15,18 +16,16 @@ class App extends Component {
     this.gain.gain.value = 1;
     this.state = {
       pads: [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       ],
       playing: false,
       position: 0,
-      bpm: 220
+      bpm: 120,
+      selectedDrum: 21
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
@@ -62,14 +61,14 @@ class App extends Component {
   }
 
   calculateTempo(bpm) {
-    return 60000 / bpm;
+    return 15000 / bpm;
   }
 
   tick() {
     let pos = this.state.position;
     pos++;
 
-    if (pos > 7) {
+    if (pos > 15) {
       pos = 0;
     }
 
@@ -100,7 +99,7 @@ class App extends Component {
     // node.start(currentTime);
     // node.stop(currentTime + 0.2);
     if(rowIndex === 0){
-      console.log("Row: 0");
+      console.log("Row: 0 play");
     }
   }
 
@@ -112,6 +111,53 @@ class App extends Component {
     }
   }
 
+  onSelectDrum(e){
+		var list=e.target;
+		let n = list.options[list.selectedIndex].getAttribute("value");
+		this.setState({
+			selectedDrum: n
+		});
+		this.midiSounds.cacheDrum(n);
+	}
+	createSelectItems() {
+		if (this.midiSounds) {
+			if (!(this.items)) {
+				this.items = [];
+				for (let i = 0; i < this.midiSounds.player.loader.drumKeys().length; i++) {
+					this.items.push(<option key={i} value={i}>{'' + (i + 0) + '. ' + this.midiSounds.player.loader.drumInfo(i).title}</option>);
+				}
+			}
+			return this.items;
+		}
+	}
+	playTestDrum(rowIndex) {
+		this.midiSounds.playDrumsNow([this.state.selectedDrum]);
+  }
+  
+  addNewPads = () =>{
+    var newArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    console.log("state",this.state);
+    this.setState({ pads: [...this.state.pads, newArray] });
+  }
+
+  clearRow = (rowIndex) =>{
+    console.log('Pad row:', rowIndex);
+    let pads = [...this.state.pads];
+    let padState = pads[rowIndex];
+    console.log("padState: ", padState);
+    for(var i=0; i<padState.length; i++){
+      if (padState[i] === 1) {
+        pads[rowIndex][i] = 0;
+      }
+    }
+    console.log("pushed pads: ", pads);
+    this.setState({ pads: pads });
+
+  }
+
+  deleteRow = (rowIndex) => {
+
+  }
 
   render() {
     return (
@@ -123,12 +169,20 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <Pads pos={this.state.position} pads={this.state.pads} toggleActive={this.toggleActive} />
+        <Pads 
+          pos={this.state.position} 
+          pads={this.state.pads} 
+          toggleActive={this.toggleActive}
+          clearRow={this.clearRow} 
+          onSelectDrum={this.onSelectDrum}  
+          createSelectItems={this.createSelectItems} 
+          selectedDrum={this.state.selectedDrum}/>
         <Controls
           bpm={this.state.bpm}
           handleChange={this.changeBpm}
           playing={this.state.playing}
-          togglePlaying={this.togglePlaying} />
+          togglePlaying={this.togglePlaying}
+          addNewPads={this.addNewPads} />
       </div>
     );
   }
