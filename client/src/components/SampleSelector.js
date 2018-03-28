@@ -32,7 +32,7 @@ class SampleSelector extends React.Component {
     render() {
       const {current} = this.props;
         return (
-          <select className="selector" autoFocus value={this.props.selectedDrums} onChange={this.props.onSelectDrum.bind(this)} onBlur={this.close}>{this.props.samples}</select>
+          <select className="selector" autoFocus value={this.props.selectedDrums} onChange={this.props.onSelectDrum} onBlur={this.close}>{this.props.samples}</select>
         )
     };
   }

@@ -63,6 +63,10 @@ button {
 	border-radius: 3px;
 }
 
+#pad0, #pad4, #pad8, #pad12 {
+  border-left: 2px solid lightpink;
+}
+
 .pad:hover {
 	background: silver;
 }
