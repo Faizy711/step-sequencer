@@ -24,6 +24,7 @@
     "express": "^4.15.4",
     "midi-sounds-react": "^1.2.50",
     "mongoose": "^4.11.7",
+    "react-html5-slider": "^0.2.1",
     "react-mdl": "^1.11.0",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",

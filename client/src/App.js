@@ -26,7 +26,7 @@ class App extends Component {
       position: 0,
       bpm: 120,
       selectedDrum: 21,
-      volume: [0.5, 0.5, 0.5, 0.5],
+      volume: [0.5, 0.25, 0.75, 0.5],
       mute: false
     }
     this.togglePlaying = this.togglePlaying.bind(this);
@@ -107,6 +107,8 @@ class App extends Component {
     // node.connect(this.gain);
     // node.start(currentTime);
     // node.stop(currentTime + 0.2);
+    let sample = this.sample[rowIndex];
+    this.midiSounds.playDrumsNow([sample]);
     if (rowIndex === 0) {
       console.log("Row: 0 play");
       this.midiSounds.playDrumsNow([35]);
@@ -133,14 +135,27 @@ class App extends Component {
     }
   }
 
-  changeSampleVolume(volume) {
+  changeSampleVolume(e, rowIndex) {
+    console.log("event: ",e,"row: ", rowIndex);
+    let rackVol = [...this.state.volume];
+    
 
-    this.setState({ volume: volume.target.value });
+    rackVol.splice(rowIndex,1,e.target.value);
+    let sampleVol = rackVol[rowIndex];
+    this.setState({ volume: rackVol });
+    
+    console.log("rackVol: ", rackVol);
+    console.log("sampleVol: ", sampleVol);
+
     if (this.state.playing) {
       clearInterval(this.timerId);
       this.setTimer();
     }
   }
+
+  sendVolumes(rowIndex){
+		// this.midiSounds.setDrumVolume(drum,this.state.volume[rowIndex]);
+	}
 
   onSelectDrum(e) {
     var list = e.target;
@@ -165,7 +180,9 @@ class App extends Component {
   addNewPads = () => {
     var newArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     console.log("state", this.state);
+    var newVol = 0.5
     this.setState({ pads: [...this.state.pads, newArray] });
+    this.state.volume.push(newVol);
     this.state.numPads++;
     console.log(this.state.numPads);
   }
@@ -187,10 +204,13 @@ class App extends Component {
 
   deleteRow = (rowIndex) => {
     let pads = [...this.state.pads];
+    let volume = [...this.state.volume];
 
     pads.splice(rowIndex, 1);
+    volume.splice(rowIndex, 1);
     console.log("pushed pads: ", pads);
     this.setState({ pads: pads });
+    this.setState({ volume: volume });
     this.state.numPads--;
     console.log(this.state.numPads);
   }
@@ -211,6 +231,9 @@ class App extends Component {
           toggleActive={this.toggleActive}
           clearRow={this.clearRow}
           deleteRow={this.deleteRow}
+          selectedDrum = {this.state.selectedDrum}
+          createdDrums = {this.createSelectItems}
+          onSelectDrum = {this.onSelectDrum}
           sampleVolume={this.state.volume}
           changeVolume={this.changeSampleVolume} />
         <Controls
