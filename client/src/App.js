@@ -19,17 +19,25 @@ class App extends Component {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       ],
+      numPads: 4,
       playing: false,
       position: 0,
       bpm: 120,
-      selectedDrum: 21
+      selectedDrum: 21,
+      volume: [0.5, 0.25, 0.75, 0.5],
+      mute: false
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
     this.changeBpm = this.changeBpm.bind(this);
+    this.changeSampleVolume = this.changeSampleVolume.bind(this);
+    this.playingsample = [];
+  }
+
+  componentDidMount() {
+    this.setState({ initialized: true });
   }
 
   toggleActive(rowIndex, id) {
@@ -88,6 +96,7 @@ class App extends Component {
       })
     });
   }
+
   playSound(rowIndex) {
     // let freq = this.frequencies[rowIndex];
     // let node = this.audioCx.createOscillator();
@@ -98,8 +107,23 @@ class App extends Component {
     // node.connect(this.gain);
     // node.start(currentTime);
     // node.stop(currentTime + 0.2);
-    if(rowIndex === 0){
+    let sample = this.sample[rowIndex];
+    this.midiSounds.playDrumsNow([sample]);
+    if (rowIndex === 0) {
       console.log("Row: 0 play");
+      this.midiSounds.playDrumsNow([35]);
+    }
+    if (rowIndex === 1) {
+      console.log("Row: 1 play");
+      this.midiSounds.playDrumsNow([15]);
+    }
+    if (rowIndex === 2) {
+      console.log("Row: 2 play");
+      this.midiSounds.playDrumsNow([24]);
+    }
+    if (rowIndex === 3) {
+      console.log("Row: 3 play");
+      this.midiSounds.playDrumsNow([5]);
     }
   }
 
@@ -111,41 +135,64 @@ class App extends Component {
     }
   }
 
-  onSelectDrum(e){
-		var list=e.target;
-		let n = list.options[list.selectedIndex].getAttribute("value");
-		this.setState({
-			selectedDrum: n
-		});
-		this.midiSounds.cacheDrum(n);
-	}
-	createSelectItems() {
-		if (this.midiSounds) {
-			if (!(this.items)) {
-				this.items = [];
-				for (let i = 0; i < this.midiSounds.player.loader.drumKeys().length; i++) {
-					this.items.push(<option key={i} value={i}>{'' + (i + 0) + '. ' + this.midiSounds.player.loader.drumInfo(i).title}</option>);
-				}
-			}
-			return this.items;
-		}
-	}
-	playTestDrum(rowIndex) {
-		this.midiSounds.playDrumsNow([this.state.selectedDrum]);
-  }
-  
-  addNewPads = () =>{
-    var newArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    console.log("state",this.state);
-    this.setState({ pads: [...this.state.pads, newArray] });
+  changeSampleVolume(e, rowIndex) {
+    console.log("event: ",e,"row: ", rowIndex);
+    let rackVol = [...this.state.volume];
+    
+
+    rackVol.splice(rowIndex,1,e.target.value);
+    let sampleVol = rackVol[rowIndex];
+    this.setState({ volume: rackVol });
+    
+    console.log("rackVol: ", rackVol);
+    console.log("sampleVol: ", sampleVol);
+
+    if (this.state.playing) {
+      clearInterval(this.timerId);
+      this.setTimer();
+    }
   }
 
-  clearRow = (rowIndex) =>{
+  sendVolumes(rowIndex){
+		// this.midiSounds.setDrumVolume(drum,this.state.volume[rowIndex]);
+	}
+
+  onSelectDrum(e) {
+    var list = e.target;
+    let n = list.options[list.selectedIndex].getAttribute("value");
+    this.setState({
+      selectedDrum: n
+    });
+    this.midiSounds.cacheDrum(n);
+  }
+  createSelectItems() {
+    if (this.midiSounds) {
+      if (!(this.items)) {
+        this.items = [];
+        for (let i = 0; i < this.midiSounds.player.loader.drumKeys().length; i++) {
+          this.items.push(<option key={i} value={i}>{'' + (i + 0) + '. ' + this.midiSounds.player.loader.drumInfo(i).title}</option>);
+        }
+      }
+      return this.items;
+    }
+  }
+
+  addNewPads = () => {
+    var newArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    console.log("state", this.state);
+    var newVol = 0.5
+    this.setState({ pads: [...this.state.pads, newArray] });
+    this.state.volume.push(newVol);
+    this.state.numPads++;
+    console.log(this.state.numPads);
+  }
+
+  clearRow = (rowIndex) => {
     console.log('Pad row:', rowIndex);
     let pads = [...this.state.pads];
     let padState = pads[rowIndex];
     console.log("padState: ", padState);
-    for(var i=0; i<padState.length; i++){
+    for (var i = 0; i < padState.length; i++) {
       if (padState[i] === 1) {
         pads[rowIndex][i] = 0;
       }
@@ -156,7 +203,16 @@ class App extends Component {
   }
 
   deleteRow = (rowIndex) => {
+    let pads = [...this.state.pads];
+    let volume = [...this.state.volume];
 
+    pads.splice(rowIndex, 1);
+    volume.splice(rowIndex, 1);
+    console.log("pushed pads: ", pads);
+    this.setState({ pads: pads });
+    this.setState({ volume: volume });
+    this.state.numPads--;
+    console.log(this.state.numPads);
   }
 
   render() {
@@ -169,20 +225,29 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <Pads 
-          pos={this.state.position} 
-          pads={this.state.pads} 
+        <Pads
+          pos={this.state.position}
+          pads={this.state.pads}
           toggleActive={this.toggleActive}
-          clearRow={this.clearRow} 
-          onSelectDrum={this.onSelectDrum}  
-          createSelectItems={this.createSelectItems} 
-          selectedDrum={this.state.selectedDrum}/>
+          clearRow={this.clearRow}
+          deleteRow={this.deleteRow}
+          selectedDrum = {this.state.selectedDrum}
+          createdDrums = {this.createSelectItems}
+          onSelectDrum = {this.onSelectDrum}
+          sampleVolume={this.state.volume}
+          changeVolume={this.changeSampleVolume} />
         <Controls
           bpm={this.state.bpm}
           handleChange={this.changeBpm}
           playing={this.state.playing}
           togglePlaying={this.togglePlaying}
           addNewPads={this.addNewPads} />
+        <MIDISounds
+          ref={(ref) => (this.midiSounds = ref)}
+          appElementName="root"
+          instruments={[111]}
+          drums={[2, 33, 15, 5, 35, 24]}
+        />
       </div>
     );
   }

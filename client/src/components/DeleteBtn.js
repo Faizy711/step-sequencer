@@ -12,7 +12,7 @@ class DeleteBtn extends React.Component {
         return (
             <div className="DeleteBtn">
                 <button onClick={() => this.props.clearRow(this.props.rowIndex)} >Clear</button>
-                <button>Delete</button>
+                <button onClick={() => this.props.deleteRow(this.props.rowIndex)} >Delete</button>
             </div>
         )
     };
