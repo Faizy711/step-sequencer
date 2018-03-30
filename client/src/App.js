@@ -36,9 +36,7 @@ class App extends Component {
       selectedDrum: [5, 25, 20, 35],
       volume: [0.5, 0.25, 0.75, 0.5],
       mute: false,
-      open: false,
-      email: "",
-      password: ""
+      open: false
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
@@ -58,7 +56,8 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({ initialized: true });
-  }
+  };
+
 
   toggleActive(rowIndex, id) {
     console.log('Pad', rowIndex, id);
@@ -175,7 +174,7 @@ class App extends Component {
   }
 
   sendVolumes(rowIndex, volume) {
-    console.log("In change volume state. The selected Drums: ",this.state.selectedDrum[rowIndex], "The Volume: ", this.state.volume[rowIndex])
+    console.log("In change volume state. The selected Drums: ", this.state.selectedDrum[rowIndex], "The Volume: ", this.state.volume[rowIndex])
     this.midiSounds.setDrumVolume(this.state.selectedDrum[rowIndex], volume);
   }
 
@@ -185,11 +184,11 @@ class App extends Component {
     let drumSelect = [...this.state.selectedDrum];
 
     let rowDrum = drumSelect[rowIndex];
-    
+
     drumSelect.splice(rowIndex, 1, n);
     console.log("ROW Drum: ", rowDrum, "Index: ", rowIndex);
 
-    this.setState({selectedDrum: drumSelect});
+    this.setState({ selectedDrum: drumSelect });
 
     console.log("Selected Drums: ", drumSelect);
     this.midiSounds.cacheDrum(n);
@@ -240,11 +239,11 @@ class App extends Component {
 
     pads.splice(rowIndex, 1);
     volume.splice(rowIndex, 1);
-    drums.splice(rowIndex,1);
+    drums.splice(rowIndex, 1);
     console.log("pushed pads: ", pads);
     this.setState({ pads: pads });
     this.setState({ volume: volume });
-    this.setState({selectedDrum: drums});
+    this.setState({ selectedDrum: drums });
     this.state.numPads--;
     console.log(this.state.numPads);
   }
@@ -260,11 +259,11 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <button className="login_modal_button" onClick={this.onOpenModal}>Log In</button>
+        <button className="login_modal_button" onClick={this.onOpenModal}>Sign Up</button>
         <Modal open={open} onClose={this.onCloseModal} little>
-          <h2>Log In</h2>
+          <h2>Sign Up</h2>
           <p>Save your sequence</p>
-          <ModalContainer/>
+          <ModalContainer />
         </Modal>
         <Pads
           pos={this.state.position}
