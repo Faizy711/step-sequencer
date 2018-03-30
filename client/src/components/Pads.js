@@ -8,7 +8,7 @@ const Pads = (props) => (
 		{props.pads.map((row, rowIndex) => {
 			return (
 				<div className="row" key={rowIndex}>
-					<SampleSelector key={rowIndex} selectedDrum={props.selectedDrum} createdDrums={props.createdDrums} onSelectDrum = {props.onSelectDrum} />
+					<SampleSelector key={rowIndex} selectedDrum={props.selectedDrum[rowIndex]} createdDrums={props.createdDrums} onSelectDrum = {(e)=> props.onSelectDrum(e,rowIndex)} />
 					<div className="sample_volume">
 						<input
 							type="range"
@@ -18,9 +18,9 @@ const Pads = (props) => (
 							step={0.1}
 							defaultValue={props.sampleVolume[rowIndex]}
 							onChange={(e)=> props.changeVolume(e,rowIndex)} />
-						<output>
+						{/* <output className="sample_output">
 							{props.sampleVolume[rowIndex]}
-						</output>
+						</output> */}
 					</div>
 					{row.map((pad, index) => {
 						return <Pad
