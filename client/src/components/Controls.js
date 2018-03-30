@@ -1,29 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Slider from 'material-ui/Slider';
 
+class Controls extends React.Component {
+    constructor(props) {
+        super(props);
+        
+    }
 
-const Controls = (props) => {
-
-    let buttonText = props.playing ? 'Stop' : 'Play';
-    return (
-        <div className="controls">
-            <button onClick={() => props.togglePlaying()}>{buttonText}</button>
-            <div className="bpm">
-                <label>BPM:</label>
-                <input
-                    type="range"
-                    id="bpm"
-                    min="1"
-                    max="420"
-                    step="1"
-                    defaultValue={props.bpm}
-                    onChange={props.handleChange} />
-                <output>
-                    {props.bpm}
-                </output>
-            </div>
-            <button onClick={() => props.addNewPads()}>+</button>
-        </div>
-    );
+        render() {
+            let buttonText = this.props.playing ? 'Stop' : 'Play';
+            return (
+                <div className="controls">
+                    <button className="control_buttons" onClick={() => this.props.togglePlaying()}>{buttonText}</button>
+                    <div className="bpm">
+                        <label>BPM:</label>
+                        <input
+                            type="range"
+                            id="bpm"
+                            min="1"
+                            max="420"
+                            step="1"
+                            defaultValue={this.props.bpm}
+                            onChange={this.props.handleChange} />
+                        <output>
+                            {this.props.bpm}
+                        </output>
+                    </div>
+                    <button className="control_buttons" onClick={() => this.props.addNewPads()}>+</button>
+                </div>
+            );
+        }
+    
 }
 
 

@@ -1,3 +1,4 @@
 module.exports = {
-  Sample: require("./sample")
+  Sample: require("./sample"),
+  User: require("./user")
 };

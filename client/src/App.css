@@ -1,5 +1,5 @@
-body {
-	background: #323232;
+body{
+  font-family: 'Roboto', sans-serif;
 }
 
 .App {
@@ -12,12 +12,15 @@ body {
 
 .controls {
 	margin-bottom: 20px;
-	width: 456px;
+  width: 456px;
+  margin-top: 20px;  
 }
 
 button {
-	background: dimgrey;
-	color: silver;
+	background: lightblue;
+  color: #eee;
+  margin-left: 15px;
+  margin-top: 9px;
 	border-radius: 3px;
 	border: none;
 	font-size: 14px;
@@ -30,9 +33,10 @@ button {
 }
 
 .bpm {
+  margin-top: 15px;
 	float: right;
-	color: silver;
-	font-weight: bold;
+	color: black;
+  font-weight: bold;
 }
 
 .bpm label {
@@ -57,14 +61,19 @@ button {
 	width: 50px;
 	height: 50px;
 	float: left;
-	margin: 0 7px 7px 0;
+	margin: 0 3px 3px 0;
 	cursor: pointer;
-	background: grey;
+	background: rgb(255, 242, 245);
 	border-radius: 3px;
 }
 
+.pads{
+  margin-top: 15px;
+  width: 100%;
+}
+
 #pad0, #pad4, #pad8, #pad12 {
-  border-left: 2px solid lightpink;
+  border-left: 2px solid lightblue;
 }
 
 .pad:hover {
@@ -72,26 +81,97 @@ button {
 }
 
 .pad.active {
-	background: green;
+	background: navy;
 }
 
 .pad.playing {
 	background: gainsboro;
-	box-shadow: 0px 0px 20px 3px rgba(255, 255, 210, .70);
+	box-shadow: 0px 0px 20px 3px rgba(210, 250, 255, 0.7);
 }
 
 .pad.active.playing, .pad.active:hover {
-	background: lime;
+	background: lightskyblue;
 }
 
 p.link a {
-	color: silver;
+	color: rgb(208, 234, 255);
 }
 
 .selector{
   float: left;
+  align-items: center;
+  margin-top:18px;
+  margin-right:15px;
 }
 
 .DeleteBtn{
-  float:right;
+  float: left;
 }
+.sample_volume{
+  float: left;
+  align-items: center;
+  margin-top:18px;
+  margin-right:15px;
+}
+
+.sample_output{
+  margin-right:4px;
+
+}
+
+.control_button {
+	background: lightblue;
+  color: #eee;
+  margin-left: 15px;
+  margin-top: 9px;
+	border-radius: 3px;
+	border: none;
+	font-size: 14px;
+	letter-spacing: 1px;
+	font-weight: bold;
+	padding: 7px 14px;	
+	float: left;
+	outline: none;
+	cursor: pointer;
+}
+
+.login_modal_button {
+	background: lightblue;
+  color: #eee;
+  margin-top: 9px;
+  margin-bottom: 15px;
+	border-radius: 3px;
+	border: none;
+	font-size: 14px;
+	letter-spacing: 1px;
+	font-weight: bold;
+	padding: 7px 14px;	
+	outline: none;
+  cursor: pointer;
+}
+
+.form_email{
+  margin-bottom: 25px;
+}
+.form_password{
+  margin-bottom: 25px;
+}
+
+.label{
+  margin-right: 17px;
+} 
+
+.clearIcon{
+  margin-top: 18px;
+  margin-left: 15px;
+  height: 20px;
+  width: 20px;
+}
+
+.deleteIcon{
+  margin-top: 18px;
+  margin-left: 15px;
+  height: 20px;
+  width: 20px;
+}
+

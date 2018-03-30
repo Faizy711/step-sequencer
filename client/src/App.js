@@ -4,7 +4,15 @@ import './App.css';
 import DrumMachine from './components/DrumMachine';
 import Pads from './components/Pads';
 import Controls from './components/Controls';
+import ModalContainer from './components/ModalContainer';
 import MIDISounds from 'midi-sounds-react';
+import ReactDOM from 'react-dom';
+
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import Modal from 'react-responsive-modal';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import "./Login.css";
+
 
 class App extends Component {
   constructor() {
@@ -25,16 +33,28 @@ class App extends Component {
       playing: false,
       position: 0,
       bpm: 120,
-      selectedDrum: 21,
+      selectedDrum: [5, 25, 20, 35],
       volume: [0.5, 0.25, 0.75, 0.5],
-      mute: false
+      mute: false,
+      open: false,
+      email: "",
+      password: ""
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
     this.changeBpm = this.changeBpm.bind(this);
     this.changeSampleVolume = this.changeSampleVolume.bind(this);
-    this.playingsample = [];
+    this.onSelectDrum = this.onSelectDrum.bind(this);
   }
+
+
+  onOpenModal = () => {
+    this.setState({ open: true });
+  };
+
+  onCloseModal = () => {
+    this.setState({ open: false });
+  };
 
   componentDidMount() {
     this.setState({ initialized: true });
@@ -107,24 +127,24 @@ class App extends Component {
     // node.connect(this.gain);
     // node.start(currentTime);
     // node.stop(currentTime + 0.2);
-    let sample = this.sample[rowIndex];
+    let sample = this.state.selectedDrum[rowIndex];
     this.midiSounds.playDrumsNow([sample]);
-    if (rowIndex === 0) {
-      console.log("Row: 0 play");
-      this.midiSounds.playDrumsNow([35]);
-    }
-    if (rowIndex === 1) {
-      console.log("Row: 1 play");
-      this.midiSounds.playDrumsNow([15]);
-    }
-    if (rowIndex === 2) {
-      console.log("Row: 2 play");
-      this.midiSounds.playDrumsNow([24]);
-    }
-    if (rowIndex === 3) {
-      console.log("Row: 3 play");
-      this.midiSounds.playDrumsNow([5]);
-    }
+    // if (rowIndex === 0) {
+    //   console.log("Row: 0 play");
+    //   this.midiSounds.playDrumsNow([35]);
+    // }
+    // if (rowIndex === 1) {
+    //   console.log("Row: 1 play");
+    //   this.midiSounds.playDrumsNow([15]);
+    // }
+    // if (rowIndex === 2) {
+    //   console.log("Row: 2 play");
+    //   this.midiSounds.playDrumsNow([24]);
+    // }
+    // if (rowIndex === 3) {
+    //   console.log("Row: 3 play");
+    //   this.midiSounds.playDrumsNow([5]);
+    // }
   }
 
   changeBpm(bpm) {
@@ -136,16 +156,17 @@ class App extends Component {
   }
 
   changeSampleVolume(e, rowIndex) {
-    console.log("event: ",e,"row: ", rowIndex);
+    console.log("event: ", e, "row: ", rowIndex);
     let rackVol = [...this.state.volume];
-    
 
-    rackVol.splice(rowIndex,1,e.target.value);
+
+    rackVol.splice(rowIndex, 1, e.target.value);
     let sampleVol = rackVol[rowIndex];
     this.setState({ volume: rackVol });
-    
+
     console.log("rackVol: ", rackVol);
     console.log("sampleVol: ", sampleVol);
+    this.sendVolumes(rowIndex, sampleVol);
 
     if (this.state.playing) {
       clearInterval(this.timerId);
@@ -153,16 +174,24 @@ class App extends Component {
     }
   }
 
-  sendVolumes(rowIndex){
-		// this.midiSounds.setDrumVolume(drum,this.state.volume[rowIndex]);
-	}
+  sendVolumes(rowIndex, volume) {
+    console.log("In change volume state. The selected Drums: ",this.state.selectedDrum[rowIndex], "The Volume: ", this.state.volume[rowIndex])
+    this.midiSounds.setDrumVolume(this.state.selectedDrum[rowIndex], volume);
+  }
 
-  onSelectDrum(e) {
+  onSelectDrum(e, rowIndex) {
     var list = e.target;
     let n = list.options[list.selectedIndex].getAttribute("value");
-    this.setState({
-      selectedDrum: n
-    });
+    let drumSelect = [...this.state.selectedDrum];
+
+    let rowDrum = drumSelect[rowIndex];
+    
+    drumSelect.splice(rowIndex, 1, n);
+    console.log("ROW Drum: ", rowDrum, "Index: ", rowIndex);
+
+    this.setState({selectedDrum: drumSelect});
+
+    console.log("Selected Drums: ", drumSelect);
     this.midiSounds.cacheDrum(n);
   }
   createSelectItems() {
@@ -181,8 +210,10 @@ class App extends Component {
     var newArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     console.log("state", this.state);
     var newVol = 0.5
+    var newDrum = 21
     this.setState({ pads: [...this.state.pads, newArray] });
     this.state.volume.push(newVol);
+    this.state.selectedDrum.push(newDrum);
     this.state.numPads++;
     console.log(this.state.numPads);
   }
@@ -205,17 +236,21 @@ class App extends Component {
   deleteRow = (rowIndex) => {
     let pads = [...this.state.pads];
     let volume = [...this.state.volume];
+    let drums = [...this.state.selectedDrum];
 
     pads.splice(rowIndex, 1);
     volume.splice(rowIndex, 1);
+    drums.splice(rowIndex,1);
     console.log("pushed pads: ", pads);
     this.setState({ pads: pads });
     this.setState({ volume: volume });
+    this.setState({selectedDrum: drums});
     this.state.numPads--;
     console.log(this.state.numPads);
   }
 
   render() {
+    const { open } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -225,15 +260,21 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <button className="login_modal_button" onClick={this.onOpenModal}>Log In</button>
+        <Modal open={open} onClose={this.onCloseModal} little>
+          <h2>Log In</h2>
+          <p>Save your sequence</p>
+          <ModalContainer/>
+        </Modal>
         <Pads
           pos={this.state.position}
           pads={this.state.pads}
           toggleActive={this.toggleActive}
           clearRow={this.clearRow}
           deleteRow={this.deleteRow}
-          selectedDrum = {this.state.selectedDrum}
-          createdDrums = {this.createSelectItems}
-          onSelectDrum = {this.onSelectDrum}
+          selectedDrum={this.state.selectedDrum}
+          createdDrums={this.createSelectItems()}
+          onSelectDrum={this.onSelectDrum}
           sampleVolume={this.state.volume}
           changeVolume={this.changeSampleVolume} />
         <Controls
@@ -246,8 +287,7 @@ class App extends Component {
           ref={(ref) => (this.midiSounds = ref)}
           appElementName="root"
           instruments={[111]}
-          drums={[2, 33, 15, 5, 35, 24]}
-        />
+          drums={[2, 33, 15, 5, 35, 24]} />
       </div>
     );
   }
