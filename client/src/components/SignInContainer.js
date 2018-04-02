@@ -4,20 +4,34 @@ import ReactDOM from 'react-dom';
 import API from "../utils/API";
 import { Button, FormGroup, FormControl, ControlLabel, Modal } from "react-bootstrap";
 
-class ModalContainer extends Component {
+class SignUpContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            FirstName: "",
-            LastName: "",
+            users: [],
             email: "",
-            password: ""
+            password: "",
+            auth: false,
+            submit: false
         };
     }
 
+    componentDidMount() {
+        this.loadUsers();
+        console.log(this.state.users);
+    }
+    
+    loadUsers = () => {
+        API.getUser()
+          .then(res =>
+            this.setState({ users: res.data, email: "", password: "" })
+          )
+          .catch(err => console.log(err));
+    };
+
     validateForm = () => {
-        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.FirstName.length > 0 && this.state.LastName.length > 0;
+        return this.state.email.length > 0 && this.state.password.length > 0;
     };
 
     handleChange = event => {
@@ -25,54 +39,55 @@ class ModalContainer extends Component {
             [event.target.id]: event.target.value
         });
         console.log("Email: ", this.state.email, "Password: ", this.state.password);
+        console.log(this.state.users);
     };
 
     handleSubmit = event => {
         event.preventDefault();
         console.log("Email: ", this.state.email, "Password: ", this.state.password);
+        let users = this.state.users;
+        let email = this.state.email;
+        let password = this.state.password;
+        let exist = this.state.auth;
+
+        for(var i=0; i< users.length; i++){
+            if(users[i].Email === email && users[i].Password === password){
+                // console.log("Succes log In!")
+                exist = true;
+                this.setState({auth: true, submit: true});
+               
+                break;
+            }
+            else{
+                // console.log("Does not exist")
+                this.setState({auth: false, submit: true});
+                exist = false;
+            }
+        }
+
+        if(exist){
+            console.log("Succes log In!");
+            console.log(this.state.submit);
+            
+        }
+        else{
+            console.log("Does not exist");
+        }
     };
 
-    handleFormSubmit = event => {
-        event.preventDefault();
-        console.log("User submit?")
-        if (this.state.FirstName && this.state.LastName && this.state.email && this.state.password) {
-          API.saveUser({
-            FirstName: this.state.FirstName,
-            LastName: this.state.LastName,
-            Email: this.state.email,
-            Password: this.state.password
-          })
-            .catch(err => console.log(err));
-        }
-      };
-
     render() {
+        var login_message;
+        if(this.state.submit){
+            if(this.state.auth){
+                login_message = <div>Successfully Logged In</div>
+            }
+            else{
+                login_message = <div>The User does not exist or password incorrect please try again</div>
+            }
+        }
         return (
             <div className="SignUp">
-                <form onSubmit={this.handleFormSubmit}>
-                <FormGroup className="form_FirstName" controlId="FirstName" bsSize="large">
-                        <ControlLabel className="label" >First Name</ControlLabel>
-                        <FormControl
-                            autoFocus
-                            type="text" 
-                            name="firstname" 
-                            placeholder="First Name" 
-                            required=""
-                            value={this.state.FirstName}
-                            onChange={this.handleChange}
-                        />
-                    </FormGroup>
-                    <FormGroup className="form_LastName" controlId="LastName" bsSize="large">
-                        <ControlLabel className="label" >Last Name</ControlLabel>
-                        <FormControl
-                            type="text" 
-                            name="lastname" 
-                            placeholder="Last Name" 
-                            required=""
-                            value={this.state.LastName}
-                            onChange={this.handleChange}
-                        />
-                    </FormGroup>
+                <form onSubmit={this.handleSubmit}>
                     <FormGroup className="form_email" controlId="email" bsSize="large">
                         <ControlLabel className="label" >Email</ControlLabel>
                         <FormControl
@@ -96,6 +111,7 @@ class ModalContainer extends Component {
                             type="password"
                         />
                     </FormGroup>
+                    {login_message}
                     <Button
                         className="login_button"
                         block
@@ -110,4 +126,4 @@ class ModalContainer extends Component {
     }
 }
 
-export default ModalContainer;
+export default SignUpContainer;

@@ -4,7 +4,9 @@ import './App.css';
 import DrumMachine from './components/DrumMachine';
 import Pads from './components/Pads';
 import Controls from './components/Controls';
-import ModalContainer from './components/ModalContainer';
+import SignUpContainer from './components/SignUpContainer';
+import SignInContainer from './components/SignInContainer';
+import SaveBtn from './components/SaveBtn';
 import MIDISounds from 'midi-sounds-react';
 import ReactDOM from 'react-dom';
 
@@ -36,7 +38,8 @@ class App extends Component {
       selectedDrum: [5, 25, 20, 35],
       volume: [0.5, 0.25, 0.75, 0.5],
       mute: false,
-      open: false
+      open1: false,
+      open2: false
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
@@ -46,12 +49,20 @@ class App extends Component {
   }
 
 
-  onOpenModal = () => {
-    this.setState({ open: true });
+  onOpenModal_SignUp = () => {
+    this.setState({ open1: true });
   };
 
-  onCloseModal = () => {
-    this.setState({ open: false });
+  onCloseModal_SignUp = () => {
+    this.setState({ open1: false });
+  };
+
+  onOpenModal_SignIn = () => {
+    this.setState({ open2: true });
+  };
+
+  onCloseModal_SignIn = () => {
+    this.setState({ open2: false });
   };
 
   componentDidMount() {
@@ -249,7 +260,8 @@ class App extends Component {
   }
 
   render() {
-    const { open } = this.state;
+    const { open1 } = this.state;
+    const { open2 } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -259,11 +271,17 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <button className="login_modal_button" onClick={this.onOpenModal}>Sign Up</button>
-        <Modal open={open} onClose={this.onCloseModal} little>
+        <button className="login_modal_button" onClick={this.onOpenModal_SignUp}>Sign Up</button>
+        <button className="login_modal_button" onClick={this.onOpenModal_SignIn}>Sign In</button>
+        <Modal open={open1} onClose={this.onCloseModal_SignUp} little>
           <h2>Sign Up</h2>
           <p>Save your sequence</p>
-          <ModalContainer />
+          <SignUpContainer onClose ={this.onCloseModal_SignUp}/>
+        </Modal>
+        <Modal open={open2} onClose={this.onCloseModal_SignIn} little>
+          <h2>Sign Up</h2>
+          <p>Save your sequence</p>
+          <SignInContainer onClose ={this.onCloseModal_SignIn}/>
         </Modal>
         <Pads
           pos={this.state.position}
@@ -282,6 +300,7 @@ class App extends Component {
           playing={this.state.playing}
           togglePlaying={this.togglePlaying}
           addNewPads={this.addNewPads} />
+        <SaveBtn pads={this.state.pads}/>
         <MIDISounds
           ref={(ref) => (this.midiSounds = ref)}
           appElementName="root"
