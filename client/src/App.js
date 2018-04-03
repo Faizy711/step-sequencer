@@ -6,9 +6,11 @@ import Pads from './components/Pads';
 import Controls from './components/Controls';
 import SignUpContainer from './components/SignUpContainer';
 import SignInContainer from './components/SignInContainer';
+import UserContainer from './components/UserContainer';
 import SaveBtn from './components/SaveBtn';
 import MIDISounds from 'midi-sounds-react';
 import ReactDOM from 'react-dom';
+import API from "./utils/API";
 
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import Modal from 'react-responsive-modal';
@@ -39,34 +41,76 @@ class App extends Component {
       volume: [0.5, 0.25, 0.75, 0.5],
       mute: false,
       open1: false,
-      open2: false
+      open2: false,
+      users: [],
+      currentUser: "",
+      email: "",
+      password: "",
+      pads_users: [],
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
     this.changeBpm = this.changeBpm.bind(this);
     this.changeSampleVolume = this.changeSampleVolume.bind(this);
     this.onSelectDrum = this.onSelectDrum.bind(this);
+    this.LoadUserPads = this.LoadUserPads.bind(this);
   }
 
 
   onOpenModal_SignUp = () => {
+    this.loadUsers();
+    console.log(this.state.users)
     this.setState({ open1: true });
   };
 
   onCloseModal_SignUp = () => {
+    this.loadUsers();
     this.setState({ open1: false });
   };
 
   onOpenModal_SignIn = () => {
+    this.loadUsers();
     this.setState({ open2: true });
   };
 
   onCloseModal_SignIn = () => {
+    this.loadUsers();
     this.setState({ open2: false });
   };
 
   componentDidMount() {
+    this.loadUsers();
+    this.LoadUserPads();
     this.setState({ initialized: true });
+  };
+
+  loadUsers = () => {
+    API.getUser()
+      .then(res =>
+        this.setState({ users: res.data })
+      )
+      .catch(err => console.log(err));
+  };
+
+  LoadUserPads = () => {
+    API.getPads()
+      .then(res =>
+        this.setState({ pads_users: res.data })
+      )
+      .catch(err => console.log(err));
+  };
+
+  handleChange = event => {
+    console.log("called handler");
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+    console.log("Email: ", this.state.email, "Password: ", this.state.password);
+    console.log(this.state.users);
+  };
+
+  validateForm = () => {
+    return this.state.email.length > 0 && this.state.password.length > 0;
   };
 
 
@@ -105,14 +149,10 @@ class App extends Component {
   tick() {
     let pos = this.state.position;
     pos++;
-
     if (pos > 15) {
       pos = 0;
     }
-
     this.setState({ position: pos });
-    console.log(pos);
-
     this.checkPad();
   }
 
@@ -259,29 +299,29 @@ class App extends Component {
     console.log(this.state.numPads);
   }
 
+  clickPadButtons = (Array) =>{
+    let newPads = Array;
+
+    this.setState({pads: newPads});
+  }
+
   render() {
     const { open1 } = this.state;
     const { open2 } = this.state;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <UserContainer email={this.state.email}></UserContainer>
         <button className="login_modal_button" onClick={this.onOpenModal_SignUp}>Sign Up</button>
         <button className="login_modal_button" onClick={this.onOpenModal_SignIn}>Sign In</button>
         <Modal open={open1} onClose={this.onCloseModal_SignUp} little>
           <h2>Sign Up</h2>
           <p>Save your sequence</p>
-          <SignUpContainer onClose ={this.onCloseModal_SignUp}/>
+          <SignUpContainer onClose={this.onCloseModal_SignUp} LoadUsers={this.LoadUsers} users={this.state.users}/>
         </Modal>
         <Modal open={open2} onClose={this.onCloseModal_SignIn} little>
           <h2>Sign Up</h2>
           <p>Save your sequence</p>
-          <SignInContainer onClose ={this.onCloseModal_SignIn}/>
+          <SignInContainer email={this.state.email} handleChange={this.handleChange} validateForm={this.validateForm} users={this.state.users} onClose={this.onCloseModal_SignIn} password={this.state.password} LoadUsers={this.LoadUsers}/>
         </Modal>
         <Pads
           pos={this.state.position}
@@ -300,7 +340,7 @@ class App extends Component {
           playing={this.state.playing}
           togglePlaying={this.togglePlaying}
           addNewPads={this.addNewPads} />
-        <SaveBtn pads={this.state.pads}/>
+        <SaveBtn users={this.state.users} pads={this.state.pads} email={this.state.email} pads_users={this.state.pads_users} LoadUserPads={this.LoadUserPads()}  clickPadButtons={this.clickPadButtons}/>
         <MIDISounds
           ref={(ref) => (this.midiSounds = ref)}
           appElementName="root"

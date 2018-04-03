@@ -18,5 +18,22 @@ export default {
     console.log("in saveUser axios");
     console.log(userData);
     return axios.post("/api/user", userData);
+  },
+  getPads: function() {
+    return axios.get("/api/pads");
+  },
+  // Gets the book with the given id
+  getPadsId: function(id) {
+    return axios.get("/api/pads/" + id);
+  },
+  // Deletes the book with the given id
+  deletePads: function(id) {
+    return axios.delete("/api/pads/" + id);
+  },
+  // Saves a book to the database
+  savePads: function(padData) {
+    console.log("in saveUser axios");
+    console.log(padData);
+    return axios.post("/api/pads", padData);
   }
 };
