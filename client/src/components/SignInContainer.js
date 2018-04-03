@@ -1,65 +1,38 @@
 import React, { Component } from 'react';
 
 import ReactDOM from 'react-dom';
-import API from "../utils/API";
 import { Button, FormGroup, FormControl, ControlLabel, Modal } from "react-bootstrap";
 
-class SignUpContainer extends Component {
+class SignInContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            users: [],
-            email: "",
-            password: "",
             auth: false,
             submit: false
         };
     }
 
-    componentDidMount() {
-        this.loadUsers();
-        console.log(this.state.users);
-    }
-    
-    loadUsers = () => {
-        API.getUser()
-          .then(res =>
-            this.setState({ users: res.data, email: "", password: "" })
-          )
-          .catch(err => console.log(err));
-    };
 
-    validateForm = () => {
-        return this.state.email.length > 0 && this.state.password.length > 0;
-    };
-
-    handleChange = event => {
-        this.setState({
-            [event.target.id]: event.target.value
-        });
-        console.log("Email: ", this.state.email, "Password: ", this.state.password);
-        console.log(this.state.users);
-    };
-
-    handleSubmit = event => {
+    handleFormSubmit = event => {
         event.preventDefault();
-        console.log("Email: ", this.state.email, "Password: ", this.state.password);
-        let users = this.state.users;
-        let email = this.state.email;
-        let password = this.state.password;
+        this.props.LoadUsers;
+        console.log("Email: ", this.props.email, "Password: ", this.props.password);
+        let users = this.props.users;
+        let email = this.props.email;
+        let password = this.props.password;
         let exist = this.state.auth;
 
         for(var i=0; i< users.length; i++){
             if(users[i].Email === email && users[i].Password === password){
-                // console.log("Succes log In!")
+                console.log("Succes log In!")
                 exist = true;
                 this.setState({auth: true, submit: true});
                
                 break;
             }
             else{
-                // console.log("Does not exist")
+                console.log("Does not exist")
                 this.setState({auth: false, submit: true});
                 exist = false;
             }
@@ -83,11 +56,12 @@ class SignUpContainer extends Component {
             }
             else{
                 login_message = <div>The User does not exist or password incorrect please try again</div>
+                
             }
         }
         return (
             <div className="SignUp">
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleFormSubmit}>
                     <FormGroup className="form_email" controlId="email" bsSize="large">
                         <ControlLabel className="label" >Email</ControlLabel>
                         <FormControl
@@ -95,8 +69,8 @@ class SignUpContainer extends Component {
                             name="email" 
                             placeholder="E-mail" 
                             required=""
-                            value={this.state.email}
-                            onChange={this.handleChange}
+                            value={this.props.email}
+                            onChange={this.props.handleChange}
                         />
                     </FormGroup>
                     <FormGroup className="form_password" controlId="password" bsSize="large">
@@ -106,8 +80,8 @@ class SignUpContainer extends Component {
                             name="password" 
                             placeholder="Password" 
                             required=""
-                            value={this.state.password}
-                            onChange={this.handleChange}
+                            value={this.props.password}
+                            onChange={this.props.handleChange}
                             type="password"
                         />
                     </FormGroup>
@@ -116,7 +90,7 @@ class SignUpContainer extends Component {
                         className="login_button"
                         block
                         bsSize="large"
-                        disabled={!this.validateForm()}
+                        disabled={!this.props.validateForm}
                         type="submit">
                         Login
                     </Button>
@@ -126,4 +100,4 @@ class SignUpContainer extends Component {
     }
 }
 
-export default SignUpContainer;
+export default SignInContainer;
