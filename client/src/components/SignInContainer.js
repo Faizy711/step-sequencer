@@ -60,7 +60,7 @@ class SignInContainer extends Component {
             }
         }
         return (
-            <div className="SignUp">
+            <div className="SignIn">
                 <form onSubmit={this.handleFormSubmit}>
                     <FormGroup className="form_email" controlId="email" bsSize="large">
                         <ControlLabel className="label" >Email</ControlLabel>
