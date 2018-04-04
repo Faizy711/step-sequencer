@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Slider from 'material-ui/Slider';
 
 class Controls extends React.Component {
     constructor(props) {

@@ -14,7 +14,6 @@ import API from "./utils/API";
 
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import Modal from 'react-responsive-modal';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import "./Login.css";
 
 
@@ -299,10 +298,10 @@ class App extends Component {
     console.log(this.state.numPads);
   }
 
-  clickPadButtons = (Array) =>{
+  clickPadButtons = (Array) => {
     let newPads = Array;
 
-    this.setState({pads: newPads});
+    this.setState({ pads: newPads });
   }
 
   render() {
@@ -310,18 +309,21 @@ class App extends Component {
     const { open2 } = this.state;
     return (
       <div className="App">
+        <header className="App-header">
+          <h1 className="App-title">The React Drum Sequencer</h1>
+        </header>
         <UserContainer email={this.state.email}></UserContainer>
         <button className="login_modal_button" onClick={this.onOpenModal_SignUp}>Sign Up</button>
         <button className="login_modal_button" onClick={this.onOpenModal_SignIn}>Sign In</button>
         <Modal open={open1} onClose={this.onCloseModal_SignUp} little>
           <h2>Sign Up</h2>
           <p>Save your sequence</p>
-          <SignUpContainer onClose={this.onCloseModal_SignUp} LoadUsers={this.LoadUsers} users={this.state.users}/>
+          <SignUpContainer onClose={this.onCloseModal_SignUp} LoadUsers={this.LoadUsers} users={this.state.users} />
         </Modal>
         <Modal open={open2} onClose={this.onCloseModal_SignIn} little>
-          <h2>Sign Up</h2>
+          <h2>Sign In</h2>
           <p>Save your sequence</p>
-          <SignInContainer email={this.state.email} handleChange={this.handleChange} validateForm={this.validateForm} users={this.state.users} onClose={this.onCloseModal_SignIn} password={this.state.password} LoadUsers={this.LoadUsers}/>
+          <SignInContainer email={this.state.email} handleChange={this.handleChange} validateForm={this.validateForm} users={this.state.users} onClose={this.onCloseModal_SignIn} password={this.state.password} LoadUsers={this.LoadUsers} />
         </Modal>
         <Pads
           pos={this.state.position}
@@ -340,7 +342,7 @@ class App extends Component {
           playing={this.state.playing}
           togglePlaying={this.togglePlaying}
           addNewPads={this.addNewPads} />
-        <SaveBtn users={this.state.users} pads={this.state.pads} email={this.state.email} pads_users={this.state.pads_users} LoadUserPads={this.LoadUserPads()}  clickPadButtons={this.clickPadButtons}/>
+        <SaveBtn users={this.state.users} pads={this.state.pads} email={this.state.email} pads_users={this.state.pads_users} LoadUserPads={this.LoadUserPads()} clickPadButtons={this.clickPadButtons} />
         <MIDISounds
           ref={(ref) => (this.midiSounds = ref)}
           appElementName="root"
