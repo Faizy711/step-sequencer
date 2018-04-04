@@ -9,10 +9,12 @@ class SaveBtn extends React.Component {
         this.state = {
             open: false,
             usersavedPads: [],
-            UserPads: []
+            UserPads: [],
+            visible: false
         }
 
         this.SetPads = this.SetPads.bind(this);
+        this.onDismiss = this.onDismiss.bind(this);
     }
 
     onOpenModal_SavePattern = () => {
@@ -37,6 +39,7 @@ class SaveBtn extends React.Component {
         console.log(current_users);
 
         if (!current_email) {
+            // this.setState({ visible: true });
             alert("Err: User does not Exist")
         }
         else {
@@ -90,6 +93,10 @@ class SaveBtn extends React.Component {
         this.setState({ usersavedPads: tempUserPads });
         console.log(this.state.UserPads);
         console.log(this.state.usersavedPads);
+    }
+
+    onDismiss() {
+        this.setState({ visible: false });
     }
 
 
