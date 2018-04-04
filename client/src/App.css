@@ -8,8 +8,8 @@ body{
 	flex-direction: column;
 	justify-content: center;
 	height: 100vh;
-	background-color: #FFEEDD;
-	color: #9381FF;
+	background-color: #FFFCF9;
+	color: #352D39;
 }
 
 .controls {
@@ -19,7 +19,7 @@ body{
 }
 
 button {
-	background: #9381FF;
+	background: #FF6978;
   color: #eee;
   margin-left: 15px;
   margin-top: 9px;
@@ -34,10 +34,15 @@ button {
 	cursor: pointer;
 }
 
+button:hover{
+	background: rgb(255, 73, 91)
+}
+
+
 .bpm {
   margin-top: 15px;
 	float: right;
-	color: #9381FF;
+	color: #FF6978;
   font-weight: bold;
 }
 
@@ -65,7 +70,7 @@ button {
 	float: left;
 	margin: 0 3px 3px 0;
 	cursor: pointer;
-	background: #F8F7FF;
+	background: #B1EDE8;
 	border-radius: 3px;
 }
 
@@ -77,24 +82,24 @@ button {
 }
 
 #pad0, #pad4, #pad8, #pad12 {
-  border-left: 2px solid #B8B8FF;
+  border-left: 2px solid #FF6978;
 }
 
 .pad:hover {
-	background: #B8B8FF;
+	background: rgb(100, 237, 232);
 }
 
 .pad.active {
-	background: #B8B8FF
+	background: #6D435A;
 }
 
 .pad.playing {
-	background: gainsboro;
-	box-shadow: 0px 0px 20px 3px rgba(227, 210, 255, 0.7);
+	background: #F8F7FF;
+	box-shadow: 0px 0px 20px 3px rgba(255, 105, 120, 0.39);
 }
 
 .pad.active.playing, .pad.active:hover {
-	background: #9381FF;
+	background: #FF6978;
 }
 
 p.link a {
@@ -140,7 +145,7 @@ p.link a {
 }
 
 .login_modal_button {
-	background: #9381FF;
+	background: #FF6978;
   color: #eee;
   margin-top: 9px;
 	border-radius: 3px;

@@ -30,3 +30,5 @@ There are several ideas pending for possible future development.
 1) A different pad sequencer for synth sounds and different notes.
 2) Better Login and Sign Up capabilities.
 3) Additional Styling such as the sliders and alert messages.
+4) Saving not only the pattern but the Volume and the selected drums, also to loads those at the same time.
+

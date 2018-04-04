@@ -46,6 +46,7 @@ class App extends Component {
       email: "",
       password: "",
       pads_users: [],
+      usershow: false
     }
     this.togglePlaying = this.togglePlaying.bind(this);
     this.toggleActive = this.toggleActive.bind(this);
@@ -303,6 +304,16 @@ class App extends Component {
     this.setState({ pads: newPads });
   }
 
+  toggleUsernameShow = () => {
+    const {usershow} = this.state
+    this.setState({usershow: !usershow})
+  }
+
+  logOffonClick = () => {
+    this.toggleUsernameShow();
+    this.setState({email: ""});
+  }
+
   render() {
     const { open1 } = this.state;
     const { open2 } = this.state;
@@ -311,9 +322,10 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">The React Drum Sequencer</h1>
         </header>
-        <UserContainer email={this.state.email}></UserContainer>
-        <button className="login_modal_button" onClick={this.onOpenModal_SignUp}>Sign Up</button>
-        <button className="login_modal_button" onClick={this.onOpenModal_SignIn}>Sign In</button>
+        {this.state.usershow && <UserLogged email={this.state.email} />}
+        {!this.state.usershow && <button className="login_modal_button" onClick={this.onOpenModal_SignUp}>Sign Up</button>}
+        {!this.state.usershow && <button className="login_modal_button" onClick={this.onOpenModal_SignIn}>Sign In</button>}
+        {this.state.usershow && <button className="login_modal_button" onClick={this.logOffonClick}>Log off</button>}
         <Modal open={open1} onClose={this.onCloseModal_SignUp} little>
           <h2>Sign Up</h2>
           <p>Save your sequence</p>
@@ -322,7 +334,7 @@ class App extends Component {
         <Modal open={open2} onClose={this.onCloseModal_SignIn} little>
           <h2>Sign In</h2>
           <p>Save your sequence</p>
-          <SignInContainer email={this.state.email} handleChange={this.handleChange} validateForm={this.validateForm} users={this.state.users} onClose={this.onCloseModal_SignIn} password={this.state.password} LoadUsers={this.LoadUsers} />
+          <SignInContainer email={this.state.email} handleChange={this.handleChange} validateForm={this.validateForm} users={this.state.users} onClose={this.onCloseModal_SignIn} password={this.state.password} LoadUsers={this.LoadUsers} toggleUsernameShow={this.toggleUsernameShow}/>
         </Modal>
         <Pads
           pos={this.state.position}
@@ -349,6 +361,19 @@ class App extends Component {
           drums={[2, 33, 15, 5, 35, 24]} />
       </div>
     );
+  }
+}
+
+class UserLogged extends Component{
+  constructor(props) {
+    super(props);
+  }
+  render(){
+    return(
+      <div>
+        <UserContainer email={this.props.email}></UserContainer>
+      </div>
+    )
   }
 }
 
