@@ -3,9 +3,9 @@
 \
 <https://step-sequencer.herokuapp.com/> \
 Version 1.0 \
-Deployment Date: April 4, 2018  \
+Deployment Date: April 4, 2018  
 
-\
+
 
 #Purpose
 
