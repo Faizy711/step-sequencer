@@ -17,7 +17,7 @@ class Controls extends React.Component {
                             type="range"
                             id="bpm"
                             min="1"
-                            max="420"
+                            max="210"
                             step="1"
                             defaultValue={this.props.bpm}
                             onChange={this.props.handleChange} />

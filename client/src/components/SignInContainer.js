@@ -28,7 +28,7 @@ class SignInContainer extends Component {
                 console.log("Succes log In!")
                 exist = true;
                 this.setState({auth: true, submit: true});
-               
+                this.props.toggleUsernameShow();
                 break;
             }
             else{
