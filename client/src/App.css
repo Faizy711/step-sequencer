@@ -65,7 +65,7 @@ button {
 	float: left;
 	margin: 0 3px 3px 0;
 	cursor: pointer;
-	background: #FFD8BE;
+	background: #F8F7FF;
 	border-radius: 3px;
 }
 
@@ -94,7 +94,7 @@ button {
 }
 
 .pad.active.playing, .pad.active:hover {
-	background: #F8F7FF;
+	background: #9381FF;
 }
 
 p.link a {

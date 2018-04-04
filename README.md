@@ -1,62 +1,32 @@
-# Create React Express App
+# The React Drum Sequencer
 
-## About This Boilerplate
+\
+<https://step-sequencer.herokuapp.com/> \
+Version 1.0 \
+Deployment Date: April 4, 2018  \
 
-This setup allows for a monolithic Node/Express/React app which can be easily deployed to Heroku.
+\
 
-The front-end React app will auto-reload as it's updated via webpack dev server, and the backend Express app will auto-reload independently with nodemon.
+#Purpose
 
-## Starting the app locally
+The React Drum Sequencer is a 1 bar drum looper that will play a 1 bar loop according to the pattern on the pads. This is very similar to a lot of drum sequencer machines where a loop will be played and the pads or buttons triggered will make a sound. I made this project to better understand React.js and to better understand how music is programmed for simple drum machines. Many thanks to n1k0/tinysynth <a href="https://github.com/n1k0/tinysynth" target="_blank">github repo</a> for the general wireframe idea and also from Unlikeness's <a href="http://unlikenesses.com/2017-07-05-react-sequencer/" target="_blank">React Sequencer Tutorial</a> for the general functionality of the sequencer. 
 
-Start by installing front and backend dependencies. While in this directory, run the following commands:
+#Instructions
 
-```
-yarn install
-cd client
-yarn install
-cd ..
-``
+Go to the website <a href="https://step-sequencer.herokuapp.com/" target="_blank">The React Drum Sequencer</a>. You do not have to sign up or sign in in order to just dive in and play. But in order to save your pattern you must sign up and then sign in with your email. You can click the pads to activate them and click play to hear the loop play the sounds. Adjust the BPM to your liking with the slider and save and load your patterns with the buttons, if you are signed in. 
 
-After both installations complete, run the following command in your terminal:
+# Built Using
 
-```
-yarn start
-```
+\
+React.js\
+Javascript\
+Midi-sounds-react npm package
 
-That's it, your app should be running on <http://localhost:3000>. The Express server should intercept any AJAX requests from the client.
+# IceBox
 
-## Deployment (Heroku)
+\
+There are several ideas pending for possible future development.
 
-### Create a Git Repo
-
-Once you're ready to deploy, start by making sure your project is a git repository. If so, proceed to the next section, otherwise run the following commands in your terminal:
-
-```
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-### Heroku
-
-Make sure that you have a Heroku app created for this project. If so, proceed to the next section, otherwise run the following command in your terminal:
-
-```
-heroku create
-```
-
-Optionally add an argument for your application's name after `create`, e.g.
-
-```
-heroku myawesomeapp
-```
-
-### Deploying
-
-After confirming that you have an up to date git repository and a Heroku app created, run the following command to deploy:
-
-```
-yarn deploy
-```
-
-If all previous steps were followed correctly, your application should be deployed to Heroku!
+1) A different pad sequencer for synth sounds and different notes.
+2) Better Login and Sign Up capabilities.
+3) Additional Styling such as the sliders and alert messages.
