@@ -1,6 +1,7 @@
 import React from "react";
 import API from "../utils/API";
 import Modal from 'react-responsive-modal';
+import { Alert } from 'reactstrap';
 
 class SaveBtn extends React.Component {
     constructor(props) {
@@ -35,20 +36,28 @@ class SaveBtn extends React.Component {
         console.log(current_email);
         console.log(current_users);
 
-        for (var i = 0; i < current_users.length; i++) {
-            console.log(current_email[i].Email);
-            if (current_email === current_users[i].Email) {
-                API.savePads({
-                    Email: current_email,
-                    Pads: pads
-                })
-                    .catch(err => console.log(err));
-                break;
-            }
-            else {
-                console.log("user does not exist")
+        if (!current_email) {
+            alert("Err: User does not Exist")
+        }
+        else {
+            for (var i = 0; i < current_users.length; i++) {
+                console.log(current_email[i].Email);
+                if (current_email === current_users[i].Email) {
+                    API.savePads({
+                        Email: current_email,
+                        Pads: pads
+                    })
+                        .catch(err => console.log(err));
+                    alert("User Pattern Saved")
+                    break;
+                }
+                else {
+                    console.log("user does not exist");
+                }
             }
         }
+
+
     };
 
     ClickPads = (rowIndex, event) => {
@@ -75,10 +84,10 @@ class SaveBtn extends React.Component {
                 rowIndex++;
                 key_count++;
             }
-            
+
         }
-        this.setState({UserPads: UserPads});
-        this.setState({usersavedPads: tempUserPads});
+        this.setState({ UserPads: UserPads });
+        this.setState({ usersavedPads: tempUserPads });
         console.log(this.state.UserPads);
         console.log(this.state.usersavedPads);
     }
@@ -89,7 +98,7 @@ class SaveBtn extends React.Component {
         const { open } = this.state;
         return (
             <div>
-                <button onClick={this.SetPads}> Save Pattern </button>
+                <button className="Save_Btn" onClick={this.SetPads}> Save Pattern </button>
                 <button onClick={this.onOpenModal_SavePattern}> Load Pattern </button>
                 <Modal open={open} onClose={this.onCloseModal_SavePattern} little>
                     <p>Save your sequence</p>

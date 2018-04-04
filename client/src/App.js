@@ -14,7 +14,6 @@ import API from "./utils/API";
 
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import Modal from 'react-responsive-modal';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import "./Login.css";
 
 

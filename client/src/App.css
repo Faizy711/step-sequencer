@@ -69,7 +69,9 @@ button {
 
 .pads{
   margin-top: 15px;
-  width: 100%;
+	width: 100%;
+	margin-left: 30vh;
+	margin-right: 10vh;
 }
 
 #pad0, #pad4, #pad8, #pad12 {
@@ -139,7 +141,6 @@ p.link a {
 	background: lightblue;
   color: #eee;
   margin-top: 9px;
-  margin-bottom: 15px;
 	border-radius: 3px;
 	border: none;
 	font-size: 14px;
@@ -147,7 +148,10 @@ p.link a {
 	font-weight: bold;
 	padding: 7px 14px;	
 	outline: none;
-  cursor: pointer;
+	cursor: pointer;
+	float: left;
+	width: 100px;
+	height: 35px;
 }
 
 .form_email{
@@ -174,4 +178,8 @@ p.link a {
   height: 20px;
   width: 20px;
 }
+
+
+
+
 

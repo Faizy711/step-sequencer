@@ -14,7 +14,7 @@ class SignUpContainer extends Component {
             email: "",
             password: "",
             signedUp: false,
-            exist: true,
+            exist: false,
             FNFill: false,
             LNFill: false,
             EMFill: false,
