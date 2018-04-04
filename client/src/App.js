@@ -100,7 +100,6 @@ class App extends Component {
   };
 
   handleChange = event => {
-    console.log("called handler");
     this.setState({
       [event.target.id]: event.target.value
     });

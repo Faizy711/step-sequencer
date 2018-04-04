@@ -12,7 +12,7 @@ class UserContainer extends React.Component {
     render() {
       let user = this.props.email;
         return (
-           <div>
+           <div className="User_Login">
             <div>User Logged In: </div>
             {user}
            </div>
