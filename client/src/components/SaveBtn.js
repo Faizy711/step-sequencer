@@ -40,7 +40,7 @@ class SaveBtn extends React.Component {
 
         if (!current_email) {
             // this.setState({ visible: true });
-            alert("Err: User does not Exist")
+            alert("Err: User does not Exist/ You must sign up and sign in to save your pattern")
         }
         else {
             for (var i = 0; i < current_users.length; i++) {
