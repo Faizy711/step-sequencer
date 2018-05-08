@@ -176,6 +176,7 @@ class App extends Component {
     // node.connect(this.gain);
     // node.start(currentTime);
     // node.stop(currentTime + 0.2);
+    console.log("play");
     let sample = this.state.selectedDrum[rowIndex];
     this.midiSounds.playDrumsNow([sample]);
     // if (rowIndex === 0) {
